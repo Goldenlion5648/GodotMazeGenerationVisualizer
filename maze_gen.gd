@@ -4,7 +4,7 @@ class_name MazeGen
 
 var starting_pos = Vector2i()
 const main_layer = 0
-const normal_wall_atlas_coords = Vector2i(7, 0)
+const normal_wall_atlas_coords = Vector2i(10, 1)
 const walkable_atlas_coords = Vector2i(9, 4)
 const SOURCE_ID = 0
 var spot_to_letter = {}
@@ -26,6 +26,7 @@ var adj4 = [
 func _ready() -> void:
 	y_dim = Globals.grid_size
 	x_dim = Globals.grid_size
+	Globals.letters_to_show.clear()
 	place_border()
 	dfs(starting_coords)
 	
@@ -79,14 +80,14 @@ func dfs(start: Vector2i):
 	while fringe.size() > 0:
 		var current: Vector2i 
 		current = fringe.pop_back() as Vector2
-		Globals.fringe_changed.emit()
-		Globals.letters_to_show.pop_back()
+		Globals.letters_to_show.pop_front()
 		if current in seen or not can_move_to(current):
-#			await get_tree().create_timer(Globals.step_delay).timeout
+			if Globals.show_labels and Globals.step_delay > 0:
+				await get_tree().create_timer(Globals.step_delay).timeout
 			continue
 			
 		seen[current] = true
-		if Globals.show_labels and current in spot_to_label:
+		if current in spot_to_label:
 			for node in spot_to_label[current]:
 				node.queue_free()
 ##			var existing_letter = find_child(spot_to_letter[current])
@@ -106,20 +107,20 @@ func dfs(start: Vector2i):
 		for pos in adj4:
 			var new_pos = current + pos
 			if new_pos not in seen and can_move_to(new_pos):
-#				var chance_of_no_loop = randi_range(1, 1)
-#				if Globals.allow_loops:
-#					chance_of_no_loop = randi_range(1, 5)
-				if will_be_converted_to_wall(new_pos) and 1 == 1:
+				var chance_of_no_loop = randi_range(1, 1)
+				if Globals.allow_loops:
+					chance_of_no_loop = randi_range(1, 5)
+				if will_be_converted_to_wall(new_pos) and chance_of_no_loop == 1:
 					place_wall(new_pos)
 				else:
 					found_new_path = true
 					fringe.append(new_pos)
-#					if Globals.show_labels:
-#						if new_pos not in spot_to_letter:
-#							spot_to_letter[new_pos] = char(current_letter_num)
-#							current_letter_num += 1
-#						Globals.letters_to_show.push_front(spot_to_letter[new_pos])	
-#						place_label(new_pos, spot_to_letter[new_pos])
+					if Globals.show_labels:
+						if new_pos not in spot_to_letter:
+							spot_to_letter[new_pos] = char(current_letter_num)
+							current_letter_num += 1
+						Globals.letters_to_show.push_front(spot_to_letter[new_pos])	
+						place_label(new_pos, spot_to_letter[new_pos])
 					
 		#if we hit a dead end or are at a cross section
 		if not found_new_path:
@@ -133,4 +134,4 @@ func place_label(pos: Vector2i, text: String):
 	if pos not in spot_to_label:
 		spot_to_label[pos] = []
 	spot_to_label[pos].append(current_label)
-	current_label.position = (map_to_local(pos)) - (Vector2i(64, 50) ) / 2.0
+	current_label.position = map_to_local(pos) - (Vector2i(64, 50)  / 2.0)

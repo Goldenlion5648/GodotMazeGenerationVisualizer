@@ -5,11 +5,10 @@ const maze = preload("res://tile_map.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-#	Globals.fringe_changed.connect(on_fringe_changed)
 	pass # Replace with function body.
 
 #func on_fringe_changed():
-#	$CanvasLayer/spots_visited_column.text = "\n".join(Globals.letters_to_show)
+	$CanvasLayer/spots_visited_column.text = "\n".join(Globals.letters_to_show)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -23,7 +22,8 @@ func _process(delta: float) -> void:
 			return "TileMap" in x.name)[0]
 		existing_maze.queue_free()
 		add_child(new_maze)
-	pass
+	
+	$CanvasLayer/spots_visited_column.text = "\n".join(Globals.letters_to_show)
 	
 
 

@@ -96,7 +96,6 @@ text = "Allow Loops?
 horizontal_alignment = 1
 
 [node name="spots_visited_column" type="Label" parent="CanvasLayer"]
-visible = false
 anchors_preset = 6
 anchor_left = 1.0
 anchor_top = 0.5
