@@ -5,7 +5,3 @@ extends HSlider
 func _ready() -> void:
 	self.value = int(Globals.step_delay)
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass

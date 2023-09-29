@@ -23,6 +23,7 @@ func _process(delta: float) -> void:
 			return "TileMap" in x.name)[0]
 		existing_maze.queue_free()
 		add_child(new_maze)
+	pass
 	
 
 

@@ -24,8 +24,8 @@ var adj4 = [
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-#	y_dim = Globals.grid_size
-#	x_dim = Globals.grid_size
+	y_dim = Globals.grid_size
+	x_dim = Globals.grid_size
 	place_border()
 	dfs(starting_coords)
 	
@@ -82,11 +82,11 @@ func dfs(start: Vector2i):
 		Globals.fringe_changed.emit()
 		Globals.letters_to_show.pop_back()
 		if current in seen or not can_move_to(current):
-			await get_tree().create_timer(Globals.step_delay).timeout
+#			await get_tree().create_timer(Globals.step_delay).timeout
 			continue
 			
 		seen[current] = true
-		if current in spot_to_label:
+		if Globals.show_labels and current in spot_to_label:
 			for node in spot_to_label[current]:
 				node.queue_free()
 ##			var existing_letter = find_child(spot_to_letter[current])
@@ -106,20 +106,20 @@ func dfs(start: Vector2i):
 		for pos in adj4:
 			var new_pos = current + pos
 			if new_pos not in seen and can_move_to(new_pos):
-				var chance_of_no_loop = randi_range(1, 1)
-				if Globals.allow_loops:
-					chance_of_no_loop = randi_range(1, 5)
-				if will_be_converted_to_wall(new_pos) and chance_of_no_loop == 1:
+#				var chance_of_no_loop = randi_range(1, 1)
+#				if Globals.allow_loops:
+#					chance_of_no_loop = randi_range(1, 5)
+				if will_be_converted_to_wall(new_pos) and 1 == 1:
 					place_wall(new_pos)
 				else:
 					found_new_path = true
 					fringe.append(new_pos)
-					if Globals.show_labels:
-						if new_pos not in spot_to_letter:
-							spot_to_letter[new_pos] = char(current_letter_num)
-							current_letter_num += 1
-						Globals.letters_to_show.push_front(spot_to_letter[new_pos])	
-						place_label(new_pos, spot_to_letter[new_pos])
+#					if Globals.show_labels:
+#						if new_pos not in spot_to_letter:
+#							spot_to_letter[new_pos] = char(current_letter_num)
+#							current_letter_num += 1
+#						Globals.letters_to_show.push_front(spot_to_letter[new_pos])	
+#						place_label(new_pos, spot_to_letter[new_pos])
 					
 		#if we hit a dead end or are at a cross section
 		if not found_new_path:
