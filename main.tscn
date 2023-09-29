@@ -1,0 +1,138 @@
+[gd_scene load_steps=7 format=3 uid="uid://th5im2tyeqpe"]
+
+[ext_resource type="PackedScene" uid="uid://cvo70qd07iu1" path="res://tile_map.tscn" id="1_8d4oo"]
+[ext_resource type="Script" path="res://main.gd" id="1_jmacd"]
+[ext_resource type="Script" path="res://Label.gd" id="2_efuxg"]
+[ext_resource type="Script" path="res://HSlider.gd" id="3_ocy65"]
+[ext_resource type="Script" path="res://solve_speed_slider.gd" id="4_gystb"]
+[ext_resource type="Script" path="res://solve_speed.gd" id="4_yrenc"]
+
+[node name="main" type="Node2D"]
+script = ExtResource("1_jmacd")
+
+[node name="TileMap" parent="." instance=ExtResource("1_8d4oo")]
+y_dim = 31
+x_dim = 31
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="grid_size_slider" type="HSlider" parent="CanvasLayer"]
+offset_left = 6.0
+offset_top = 3.0
+offset_right = 195.0
+offset_bottom = 54.0
+min_value = 5.0
+max_value = 61.0
+step = 2.0
+value = 17.0
+script = ExtResource("3_ocy65")
+
+[node name="Label" type="Label" parent="CanvasLayer/grid_size_slider"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -41.5
+offset_top = 28.0
+offset_right = 51.5
+offset_bottom = 100.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 24
+text = "test"
+horizontal_alignment = 1
+script = ExtResource("2_efuxg")
+
+[node name="solve_speed_slider" type="HSlider" parent="CanvasLayer"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -238.0
+offset_top = 1.0
+offset_right = -49.0
+offset_bottom = 52.0
+grow_horizontal = 0
+max_value = 1.0
+step = 0.01
+script = ExtResource("4_gystb")
+
+[node name="Label" type="Label" parent="CanvasLayer/solve_speed_slider"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -41.5
+offset_top = 28.0
+offset_right = 51.5
+offset_bottom = 100.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 24
+text = "test"
+horizontal_alignment = 1
+script = ExtResource("4_yrenc")
+
+[node name="allow_loops" type="CheckButton" parent="CanvasLayer"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 42.0
+offset_top = 3.0
+offset_right = 86.0
+offset_bottom = 27.0
+grow_horizontal = 2
+
+[node name="Label2" type="Label" parent="CanvasLayer/allow_loops"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -101.0
+offset_top = 30.0
+offset_right = 100.0
+offset_bottom = 102.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 24
+text = "Allow Loops?
+"
+horizontal_alignment = 1
+
+[node name="spots_visited_column" type="Label" parent="CanvasLayer"]
+visible = false
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -106.0
+offset_top = -304.0
+offset_bottom = 291.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 32
+horizontal_alignment = 1
+
+[node name="show_labels" type="CheckButton" parent="CanvasLayer"]
+offset_left = 262.0
+offset_right = 306.0
+offset_bottom = 24.0
+
+[node name="showing_labels" type="Label" parent="CanvasLayer/show_labels"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -92.0
+offset_top = 33.0
+offset_right = 109.0
+offset_bottom = 105.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 24
+text = "Show Labels?"
+horizontal_alignment = 1
+
+[connection signal="value_changed" from="CanvasLayer/grid_size_slider" to="." method="_on_grid_size_slider_value_changed"]
+[connection signal="value_changed" from="CanvasLayer/grid_size_slider" to="CanvasLayer/grid_size_slider/Label" method="_on_grid_size_slider_value_changed"]
+[connection signal="value_changed" from="CanvasLayer/solve_speed_slider" to="." method="_on_solve_speed_slider_value_changed"]
+[connection signal="value_changed" from="CanvasLayer/solve_speed_slider" to="CanvasLayer/solve_speed_slider/Label" method="_on_solve_speed_slider_value_changed"]
+[connection signal="toggled" from="CanvasLayer/allow_loops" to="." method="_on_allow_loops_toggled"]
+[connection signal="toggled" from="CanvasLayer/show_labels" to="." method="_on_show_labels_toggled"]
